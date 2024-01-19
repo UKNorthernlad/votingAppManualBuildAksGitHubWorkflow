@@ -42,7 +42,7 @@ env:
 
 jobs:
   deploy:
-    environment: "Testing"
+    environment: Testing
     permissions:
       actions: read
       contents: read
