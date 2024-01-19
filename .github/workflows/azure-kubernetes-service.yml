@@ -65,8 +65,10 @@ jobs:
       # Logs in with your Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
+
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          allow-no-subscriptions: true
          
       #- name: Login to Azure
         #run: |
