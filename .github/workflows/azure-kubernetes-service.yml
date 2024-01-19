@@ -59,4 +59,5 @@ jobs:
 
       # Display front env service IP
       - run: |
+           sleep 60
            kubectl get service/azure-vote-front
