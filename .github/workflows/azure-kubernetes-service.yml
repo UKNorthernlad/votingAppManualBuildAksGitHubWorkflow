@@ -61,6 +61,14 @@ jobs:
        # uses: azure/login@v1.4.6
        # with:
          # creds: ${{ secrets.AZURE_CREDENTIALS }}
+         
+      - name: Debug
+        run: |
+          echo ${{ secrets.AZURE_CREDENTIALS.clientId }}
+          echo ${{ secrets.AZURE_CREDENTIALS.clientSecret }}
+          echo ${{ secrets.AZURE_CREDENTIALS.tenantId }}
+          
+
 
       - name: Login to Azure
         run: |
