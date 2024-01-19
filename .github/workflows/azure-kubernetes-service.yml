@@ -48,6 +48,8 @@ jobs:
       contents: read
       id-token: write
     runs-on: ubuntu-latest
+    env:
+      testing: ${{ secrets.AZURE_CREDENTIALS.clientId }}
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v3
@@ -63,8 +65,6 @@ jobs:
          # creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Debug
-        env:
-           testing: ${{ secrets.AZURE_CREDENTIALS.clientId }}
         run: |
           echo "XXX $testing XXX"
           echo YYY ${{ secrets.AZURE_CREDENTIALS.clientSecret }}
