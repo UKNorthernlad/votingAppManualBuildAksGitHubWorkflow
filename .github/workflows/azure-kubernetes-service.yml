@@ -49,7 +49,7 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     env:
-      testing: ${{ secrets.AZURE_CREDENTIALS.clientId }}
+      testing: ${{ secrets.Message }}
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v3
