@@ -58,10 +58,14 @@ jobs:
         run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
       # Logs in with your Azure credentials
-      - name: Azure login
-        uses: azure/login@v1.4.6
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+     # - name: Azure login
+       # uses: azure/login@v1.4.6
+       # with:
+         # creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure
+        run: |
+          az login --service-principal -u ${{ secrets.AZURE_CREDENTIALS.clientId }} -p ${{ secrets.AZURE_CREDENTIALS.clientSecret }} --tenant ${{ secrets.AZURE_CREDENTIALS.tenantId }}
           
       # Use kubelogin to configure your kubeconfig for Azure auth
       - name: Set up kubelogin for non-interactive login
