@@ -63,8 +63,10 @@ jobs:
          # creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Debug
+        env:
+           testing: ${{ secrets.AZURE_CREDENTIALS.clientId }}
         run: |
-          echo XXX ${{ secrets.AZURE_CREDENTIALS.clientId }}
+          echo "XXX $testing XXX"
           echo YYY ${{ secrets.AZURE_CREDENTIALS.clientSecret }}
           echo ZZZ ${{ secrets.AZURE_CREDENTIALS.tenantId }}
           
