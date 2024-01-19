@@ -43,7 +43,7 @@ env:
 
 jobs:
   deploy:
-  environment: Configure Testing
+    environment: "Configure Testing"
     permissions:
       actions: read
       contents: read
