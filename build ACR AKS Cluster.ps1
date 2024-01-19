@@ -5,6 +5,7 @@
 $resourceGroup = "containers"
 $acr="eboracr"
 $aksClusterName = "eborcluster99"
+$subscriptionId = "XXXXXX"
 
 az group create -n $resourceGroup -l "westeurope"
 az acr create -n $acr -g $resourceGroup --sku basic
@@ -108,3 +109,34 @@ spec:
 kubectl apply -f application.yaml
 
 kubectl get service/azure-vote-front --watch
+
+
+###################################################
+# Setup AAD Service Principal for GH authentication
+###################################################
+
+
+# https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux
+# Use GitHub Actions to connect to Azure
+
+# Create an AAD Application for authentication
+$appId = az ad app create --display-name GitHubActionsApp  --query "appId" --output tsv 
+$spId = az ad sp create --id $appId --query "id" --output tsv 
+
+az role assignment create --role contributor --subscription $subscription --assignee-object-id  $spId --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resourceGroup
+
+
+# Now create the following Secret in a new environment called "Testing"
+
+AZURE_CREDENTIALS
+{
+    "clientSecret":   "XXXX",
+    "subscriptionId": "XXXX",
+    "tenantId":       "XXXX",
+    "clientId":       "XXXX",
+}
+
+
+
+
+
