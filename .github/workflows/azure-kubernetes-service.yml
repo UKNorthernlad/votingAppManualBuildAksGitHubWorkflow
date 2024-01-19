@@ -53,6 +53,10 @@ jobs:
       # Checks out the repository this file is in
       - uses: actions/checkout@v3
 
+      # Install the Azure CLI
+      - name: Install Azure CLI
+        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
       # Logs in with your Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
