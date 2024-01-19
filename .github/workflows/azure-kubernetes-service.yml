@@ -49,7 +49,7 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     env:
-      testing: ${{ secrets.Message }}
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v3
@@ -58,23 +58,19 @@ jobs:
       - name: Install Azure CLI
         run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-      # Logs in with your Azure credentials
-     # - name: Azure login
-       # uses: azure/login@v1.4.6
-       # with:
-         # creds: ${{ secrets.AZURE_CREDENTIALS }}
-         
       - name: Debug
         run: |
-          echo "XXX $testing XXX"
-          echo YYY ${{ secrets.AZURE_CREDENTIALS.clientSecret }}
-          echo ZZZ ${{ secrets.AZURE_CREDENTIALS.tenantId }}
-          
+          echo "XXX $AZURE_CREDENTIALS XXX"
 
-
-      - name: Login to Azure
-        run: |
-          az login --service-principal -u ${{ secrets.AZURE_CREDENTIALS.clientId }} -p ${{ secrets.AZURE_CREDENTIALS.clientSecret }} --tenant ${{ secrets.AZURE_CREDENTIALS.tenantId }}
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+         
+      #- name: Login to Azure
+        #run: |
+          #az login --service-principal -u ${{ secrets.AZURE_CREDENTIALS.clientId }} -p ${{ secrets.AZURE_CREDENTIALS.clientSecret }} --tenant ${{ secrets.AZURE_CREDENTIALS.tenantId }}
           
       # Use kubelogin to configure your kubeconfig for Azure auth
       - name: Set up kubelogin for non-interactive login
