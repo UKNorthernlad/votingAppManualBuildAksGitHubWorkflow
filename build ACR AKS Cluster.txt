@@ -38,7 +38,7 @@ kubectl apply -f .\basicPolicy.yaml
 /agnhost connect <server-ip>:80 --timeout=3s --protocol=tcp
 
 # Apply a label to the "client" pod and retry the connection - it should work this time.
-kubectl label pod client -n demo app=client
+kubectl label pod clientpod app=client
 
 ###################################################
 # Setup AAD Service Principal for GH authentication
