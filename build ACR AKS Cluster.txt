@@ -20,15 +20,25 @@ az acr import  -n $acr --source mcr.microsoft.com/azuredocs/azure-vote-front:v1 
 
 # Import the k8s application manifest
 kubectl apply -f .\application.yaml
-#kubectl get service/azure-vote-front --watch
 
-# Install Calico Operator
-# https://docs.tigera.io/calico/latest/getting-started/kubernetes/managed-public-cloud/aks
-# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+# Basic demo to show the Network Policies are working
+# Deploy a "server" pod.
+kubectl run serverpod --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 --labels="app=server" --port=80 --command -- /agnhost serve-hostname --tcp --http=false --port "80"
+Write-Host "Server Pod IP =  $(kubectl get pod/serverpod -o jsonpath='{.status.podIP}')"
+# Deploy "client" pod. This will drop into a command prompt on the pod.
+kubectl run -it clientpod --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 --command -- bash
 
-# Configure the Calico installation.
-# kubectl create -f .\calicoInstallation.yaml
+# Using the "agnhost" testing tool on the client pod, try to connect to the server IP on port 80. The connection should succeed.
+/agnhost connect <server-ip>:80 --timeout=3s --protocol=tcp
 
+# Apply a lockdown policy. This only allows traffic into (INGRESS) the server pod if the traffic comes from another pod lablled "client". 
+kubectl apply -f .\basicPolicy.yaml
+
+# Try the connection again - this time it should timeout because the "server" only accepts traffic from pods labled "client".
+/agnhost connect <server-ip>:80 --timeout=3s --protocol=tcp
+
+# Apply a label to the "client" pod and retry the connection - it should work this time.
+kubectl label pod client -n demo app=client
 
 ###################################################
 # Setup AAD Service Principal for GH authentication
