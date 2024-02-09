@@ -11,7 +11,7 @@ $subscriptionId = "XXXXXX"
 
 az group create -n $resourceGroup -l "westeurope"
 az acr create -n $acr -g $resourceGroup --sku basic
-az aks create -n $aksClusterName -g $resourceGroup --generate-ssh-keys --attach-acr $acr  --network-plugin kubenet --network-policy calico
+az aks create -n $aksClusterName -g $resourceGroup --generate-ssh-keys --attach-acr $acr  --network-plugin azure --network-policy calico
 az aks get-credentials -g $resourceGroup -n $aksClusterName
 
 # Import the Cat & Dog Voting application
