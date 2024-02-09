@@ -1,5 +1,8 @@
-﻿# Taken from https://learn.microsoft.com/en-us/azure/aks/kubernetes-action
+﻿# https://learn.microsoft.com/en-us/azure/aks/kubernetes-action
 # Authenticate with Azure Container Registry (ACR) from Azure Kubernetes Service (AKS)
+
+# Secure traffic between pods using network policies in AKS hybrid
+# https://learn.microsoft.com/en-us/azure/aks/use-network-policies
 
 $resourceGroup = "containers"
 $acr="eboracr"
@@ -8,7 +11,7 @@ $subscriptionId = "XXXXXX"
 
 az group create -n $resourceGroup -l "westeurope"
 az acr create -n $acr -g $resourceGroup --sku basic
-az aks create -n $aksClusterName -g $resourceGroup --generate-ssh-keys --attach-acr $acr  --network-plugin azure
+az aks create -n $aksClusterName -g $resourceGroup --generate-ssh-keys --attach-acr $acr  --network-plugin kubenet --network-policy calico
 az aks get-credentials -g $resourceGroup -n $aksClusterName
 
 # Import the Cat & Dog Voting application
@@ -21,10 +24,10 @@ kubectl apply -f .\application.yaml
 
 # Install Calico Operator
 # https://docs.tigera.io/calico/latest/getting-started/kubernetes/managed-public-cloud/aks
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
 
 # Configure the Calico installation.
-kubectl create -f .\calicoInstallation.yaml
+# kubectl create -f .\calicoInstallation.yaml
 
 
 ###################################################
