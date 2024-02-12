@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azure-vote-back
+  name: apibackendcosmosdb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: azure-vote-back
+      app: apibackendcosmosdb
   template:
     metadata:
       labels:
-        app: azure-vote-back
+        app: apibackendcosmosdb
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
       containers:
-      - name: azure-vote-back
-        image: eboracr.azurecr.io/azure-vote-back:v1
+      - name: apibackendcosmosdb
+        image: boardingking/nodeapibackendcallscosmosdb:latest
         env:
         - name: ALLOW_EMPTY_PASSWORD
           value: "yes"
@@ -28,38 +28,38 @@ spec:
             cpu: 250m
             memory: 256Mi
         ports:
-        - containerPort: 6379
+        - containerPort: 8080
           name: redis
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-vote-back
+  name: apibackendcosmosdb
 spec:
   ports:
-  - port: 6379
+  - port: 8080
   selector:
-    app: azure-vote-back
+    app: apibackendcosmosdb
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azure-vote-front
+  name: reactfrontendcallsapi
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: azure-vote-front
+      app: reactfrontendcallsapi
   template:
     metadata:
       labels:
-        app: azure-vote-front
+        app: reactfrontendcallsapi
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
       containers:
-      - name: azure-vote-front
-        image: eboracr.azurecr.io/azure-vote-front:v1
+      - name: reactfrontendcallsapi
+        image: boardingking/reactfrontendcallsapi:latest
         resources:
           requests:
             cpu: 100m
@@ -70,16 +70,16 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: REDIS
-          value: "azure-vote-back"
+        - name: BACKENDAPI
+          value: "apibackendcosmosdb"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-vote-front
+  name: reactfrontendcallsapi
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: azure-vote-front
+    app: reactfrontendcallsapi
