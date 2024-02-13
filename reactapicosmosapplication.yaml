@@ -71,7 +71,7 @@ spec:
         - containerPort: 80
         env:
         - name: BACKENDAPI
-          value: "apibackendcosmosdb"
+          value: "not currently used"
 ---
 apiVersion: v1
 kind: Service
